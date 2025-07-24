@@ -1,0 +1,21 @@
+  notify:
+    if: always()
+    needs: [lint-test, changelog-version]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack notification
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          payload: |
+            {
+              "text": "🚀 Release `${{ github.ref_name }}` published. CI passed! 🎉\nView run: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>"
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Send Discord notification
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{\"content\":\"🚀 Release `${{ github.ref_name }}` passed CI! 🎉 <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}>\"}" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}

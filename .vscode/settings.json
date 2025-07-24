@@ -1,0 +1,39 @@
+{
+    "autoDocstring.docstringFormat": "google",
+    "editor.rulers": [
+        80,
+        100,
+        120
+    ],
+    "[python]": {
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.formatOnType": false,
+        "editor.wordBasedSuggestions": "off",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+    "[markdown]": {
+        "editor.formatOnSave": true,
+    },
+    "markdownlint.config": {
+        "MD024": false
+    },
+    "isort.args": [
+        "--profile",
+        "black"
+    ],
+    "pylint.enabled": true,
+    "pylint.importStrategy": "fromEnvironment",
+    "python.missingPackage.severity": "Warning",
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.analysis.autoImportCompletions": true,
+    "black-formatter.importStrategy": "fromEnvironment",
+    "isort.importStrategy": "fromEnvironment",
+}

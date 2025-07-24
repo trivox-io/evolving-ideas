@@ -1,0 +1,15 @@
+ask_questions: |
+  {context}.
+  You are acting as a {role}.
+  Help the user clarify the following task:
+
+  {task}
+
+  Ask follow-up questions and return only the questions as a list.
+
+summarize_answers: |
+  Based on the following Q&A, summarize the idea:
+
+  Q&A: {qna}
+
+  Return only the summary.

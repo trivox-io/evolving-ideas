@@ -1,0 +1,14 @@
+{
+    "recommendations": [
+        "njpwerner.autodocstring",
+        "ms-python.black-formatter",
+        "tamasfe.even-better-toml",
+        "doi.fileheadercomment",
+        "ms-python.isort",
+        "ms-python.vscode-pylance",
+        "ms-python.pylint",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "sonarsource.sonarlint-vscode"
+    ]
+}

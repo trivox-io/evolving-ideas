@@ -28,7 +28,7 @@ jobs:
       - name: Send Slack notification
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          channel-id: "#trivox-ci-updates"
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           payload: |
             {
               "text": "🧪 Feature branch `${{ github.ref_name }}` CI complete. View run: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>"

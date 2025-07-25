@@ -27,7 +27,7 @@ jobs:
 
       - name: Build Sphinx docs with AutoAPI
         run: |
-          sphinx-build -b html docs/ output/
+          sphinx-build -b html docs/source output/
 
       - name: Push to trivox-docs repo
         uses: peaceiris/actions-gh-pages@v3

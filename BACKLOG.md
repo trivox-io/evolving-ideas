@@ -51,7 +51,7 @@
 ## 💻 Developer Experience
 
 - [ ] Auto-version bump and changelog on PRs to `main`
-- [ ] Auto-generate markdown docs from docstrings (`mkdocs` or similar)
+- [x] Auto-generate markdown docs from docstrings (`mkdocs` or similar)
 - [ ] Auto-run format/lint/test pipeline locally on commit
 - [ ] Pre-commit hooks: `black`, `pylint`, `isort`, `pytest`
 - [ ] CLI diagnostics (`evolving-ideas doctor`)

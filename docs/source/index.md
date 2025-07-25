@@ -15,3 +15,10 @@ License <license>
 
 autoapi/index
 ```
+
+```{toctree}
+:caption: Project Overview
+:hidden:
+
+Architecture <architecture>
+```

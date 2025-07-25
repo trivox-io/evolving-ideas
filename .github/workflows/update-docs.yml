@@ -1,0 +1,33 @@
+name: Push evolving-ideas docs to trivox-docs
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  push-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v3
+
+      - name: Prepare docs for push
+        run: |
+          mkdir -p output
+          cp -r docs/* output/
+
+      - name: Push to trivox-docs repo
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          external_repository: trivox-io/trivox-docs
+          publish_branch: main
+          publish_dir: ./output
+          destination_dir: source/evolving-ideas
+          commit_message: "Update evolving-ideas docs"
+          keep_files: true

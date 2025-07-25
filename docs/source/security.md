@@ -1,0 +1,4 @@
+# SECURITY
+
+```{include} ../../SECURITY.md
+```

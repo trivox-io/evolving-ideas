@@ -133,8 +133,6 @@ class EvolvingIdeaApp:
         :return: An IdeaTree object representing the loaded idea.
         :rtype: IdeaTree
         """
-        repo = IdeaRepository(Path(".storage/applications/ideas"))
-        return repo.load(idea_id)
 
     def improve(self, idea_id: str):
         """
@@ -143,31 +141,3 @@ class EvolvingIdeaApp:
         :param idea_id: The unique identifier of the idea to improve.
         :type idea_id: str
         """
-        # idea_tree = self.load(idea_id)
-        # parent_version_obj = idea_tree.versions.get(parent_version)
-        # if not parent_version_obj:
-        #     logging.error(f"Parent version {parent_version} not found.")
-        #     return
-
-        # # Run chat session or gather input for improved idea version
-        # idea_data = self.run_chat_session()
-
-        # new_version_num = max(idea_tree.versions.keys()) + 1
-        # new_version = IdeaVersion(
-        #     id=idea_id,
-        #     version=new_version_num,
-        #     title=idea_data["task"][:50],
-        #     status="raw",
-        #     created_at=datetime.now().isoformat(),
-        #     author=parent_version_obj.author,
-        #     parent_id=parent_version,
-        #     description=idea_data["task"],
-        #     context={"role": idea_data["role"], "task": idea_data["task"], "notes": ""},
-        #     qna=[QAPair(**qa) for qa in idea_data["qna"]],
-        #     attachments=[],
-        #     tags=[],
-        #     linked_projects=[],
-        #     related_ideas=[]
-        # )
-        # idea_tree.add_new_version(new_version)
-        # logging.info(f"Added new version v{new_version_num} to idea {idea_id}")

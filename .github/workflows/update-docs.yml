@@ -24,7 +24,7 @@ jobs:
       - name: Push to trivox-docs repo
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          personal_token: ${{ secrets.PERSONAL_TOKEN }}
           external_repository: trivox-io/trivox-docs
           publish_branch: main
           publish_dir: ./output

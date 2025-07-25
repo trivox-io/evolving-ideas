@@ -4,13 +4,13 @@ Automation engine for turning ideas into structured, evolving blueprints.
 
 ```{toctree}
 :caption: Home
-:hidden:
+:maxdepth: 1
 Read Me <readme>
 License <license>
 ```
 
 ```{toctree}
-:hidden:
+:maxdepth: 1
 :caption: API Reference
 
 autoapi/index
@@ -18,7 +18,7 @@ autoapi/index
 
 ```{toctree}
 :caption: Project Overview
-:hidden:
+:maxdepth: 1
 
 Architecture <architecture>
 ```

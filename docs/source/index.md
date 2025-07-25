@@ -7,6 +7,7 @@ Automation engine for turning ideas into structured, evolving blueprints.
 :maxdepth: 1
 Read Me <readme>
 License <license>
+Architecture <architecture>
 ```
 
 ```{toctree}
@@ -14,11 +15,4 @@ License <license>
 :caption: API Reference
 
 autoapi/index
-```
-
-```{toctree}
-:caption: Project Overview
-:maxdepth: 1
-
-Architecture <architecture>
 ```

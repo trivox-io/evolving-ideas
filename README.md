@@ -58,6 +58,26 @@ cp .env-example .env
 python manage.py add
 ```
 
+## 📚 Documentation
+
+<!-- Full documentation is available at:  
+👉 [docs.trivox.io](https://docs.trivox.io) -->
+
+To build the docs locally:
+
+```bash
+# Create virtualenv and install docs dependencies
+python -m venv .venv
+source .venv\Scripts\activate
+pip install -r requirements-docs.txt
+
+# Build docs
+cd docs
+make.bat html
+```
+
+Then open: ``docs/build/html/index.html`` in your browser.
+
 ## 📜 License
 
 MIT – see [LICENSE](LICENSE)

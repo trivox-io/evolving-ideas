@@ -1,5 +1,6 @@
 # Security Policy
 
+<!--start-->
 ## Supported Versions
 
 | Version | Supported |
@@ -11,3 +12,4 @@
 Please open a private GitHub issue to report a vulnerability.
 
 We take all security reports seriously.
+<!--end-->

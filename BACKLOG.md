@@ -1,5 +1,6 @@
 # 🧠 Evolving Ideas – Backlog
 
+<!--start-->
 *Last updated: 2025-07-24*
 
 ---
@@ -98,3 +99,5 @@
 - [ ] Build standalone binary with `pyinstaller` or `shiv`
 - [ ] Docker container for headless automation
 - [ ] Portable mode with self-contained `.evolving_ideas` folder
+
+<!--end-->

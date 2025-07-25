@@ -1,5 +1,6 @@
 # 🧠 Evolving Ideas CLI
 
+<!--start-->
 Turn chaos into clarity. Evolving Ideas helps developers and creators capture, structure, and evolve their thoughts into real, buildable systems.
 
 ## 🚀 Features
@@ -87,3 +88,4 @@ MIT – see [LICENSE](LICENSE)
 ## 🤝 Contributing
 
 We welcome contributions! Please read the [contributing guide](CONTRIBUTING.md) and [code of conduct](CODE_OF_CONDUCT.md) before getting started.
+<!--end-->

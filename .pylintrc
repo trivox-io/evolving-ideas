@@ -21,4 +21,4 @@ disable=
     unused-argument,
     too-many-arguments,
     too-many-positional-arguments,
-    duplicated-code,
+    R0801 # duplicate-code

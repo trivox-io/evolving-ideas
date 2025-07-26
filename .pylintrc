@@ -20,4 +20,5 @@ disable=
     missing-function-docstring,
     unused-argument,
     too-many-arguments,
-    too-many-positional-arguments
+    too-many-positional-arguments,
+    duplicated-code,

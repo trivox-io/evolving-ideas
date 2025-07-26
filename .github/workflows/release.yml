@@ -38,7 +38,7 @@ jobs:
 
       - name: Compare versions
         run: |
-          python -c "from packaging.version import parse as v; n=v('0.1.0'); o=v('v0.1.0'.lstrip('v')); exit(1) if n <= o else print(f'✅ Version {n} > {o}')" 
+          python -c "from packaging.version import parse as v; n=v('0.1.0'); o=v('v0.1.0'.lstrip('v')); print(f'New: {n}, Old: {o}'); print('✅ OK' if n > o else '❌ FAIL'); exit(0) if n > o else exit(1)" 
 
   notify:
     if: always()

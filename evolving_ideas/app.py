@@ -12,7 +12,7 @@ from evolving_ideas.settings import settings
 from evolving_ideas.interface.presenters import chat_logger
 from evolving_ideas.domain.repositories.idea_repository import IdeaRepository
 from evolving_ideas.domain.models.idea import QAPair
-from evolving_ideas.domain.services.ide_tree import IdeaTree
+from evolving_ideas.domain.services.idea_tree import IdeaTree
 from evolving_ideas.infra.responder import LLMResponder
 from evolving_ideas.sessions.chat import ChatSession
 

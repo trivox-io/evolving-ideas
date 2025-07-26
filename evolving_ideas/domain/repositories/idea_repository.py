@@ -10,7 +10,7 @@ from datetime import datetime
 import yaml
 
 from evolving_ideas.domain.models.idea import IdeaVersion, QAPair, IdeaMetadata, Tree, NodeData
-from evolving_ideas.domain.services.ide_tree import IdeaTree
+from evolving_ideas.domain.services.idea_tree import IdeaTree
 
 
 class IdeaRepository:

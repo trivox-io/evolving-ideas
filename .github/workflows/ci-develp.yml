@@ -13,7 +13,7 @@ jobs:
   notify:
     if: always()
     runs-on: ubuntu-latest
-    needs: [lint-test, changelog-version]
+    needs: [lint-test]
     steps:
       - name: Send Slack notification
         uses: slackapi/slack-github-action@v1.24.0

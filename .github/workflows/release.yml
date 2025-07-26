@@ -38,7 +38,7 @@ jobs:
 
       - name: Compare versions
         run: |
-          python -c "from packaging.version import parse as v; n=v('${{ steps.changelog.outputs.version }}'); o=v('${{ steps.get_tag.outputs.latest_tag }}'); exit(1) if n <= o else print(f'✅ Version {n} > {o}')" 
+          python -c "from packaging.version import parse as v; n=v('0.1.0'); o=v('v0.1.0'.lstrip('v')); exit(1) if n <= o else print(f'✅ Version {n} > {o}')" 
 
   notify:
     if: always()

@@ -2,20 +2,40 @@ name: Release CI
 
 on:
   push:
-    branches: [release]
+    branches: [release/**]
   pull_request:
-    branches: [release]
+    branches: [release/**]
 
 jobs:
-  changelog-version:
+  validate-changelog:
     runs-on: ubuntu-latest
     steps:
-      - name: Check for version or changelog file presence
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get latest Git tag
+        id: get_tag
         run: |
-          test -f CHANGELOG.md && echo "Changelog exists"
+          git fetch --tags
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "Latest tag is: $LATEST_TAG"
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Extract version from CHANGELOG.md
+        id: changelog
+        run: |
+          # Expect version on first line starting with ## vX.Y.Z
+          VERSION=$(grep -E '^##\s*v?[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+          echo "Found changelog version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Compare versions
+        run: |
+          python -c "from packaging.version import parse as v; n=v('${{ steps.changelog.outputs.version }}'); o=v('${{ steps.get_tag.outputs.latest_tag }}'); exit(1) if n <= o else print(f'✅ Version {n} > {o}')" 
+
   notify:
     if: always()
-    needs: [changelog-version]
+    needs: [validate-changelog]
     runs-on: ubuntu-latest
     steps:
       - name: Send Slack notification

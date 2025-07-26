@@ -1,0 +1,40 @@
+name: Lint and Test
+
+on:
+  workflow_call:
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Set up virtualenv
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pip install -r requirements-docs.txt
+
+      - name: Run isort
+        run: .venv/bin/isort evolving_ideas --profile black
+
+      - name: Run black
+        run: .venv/bin/black evolving_ideas --check
+
+      - name: Run pylint
+        run: |
+          . .venv/bin/activate
+          pylint evolving_ideas
+
+      - name: Run pytest
+        run: |
+          . .venv/bin/activate
+          pytest || echo "No tests yet"

@@ -8,17 +8,7 @@ on:
 
 jobs:
   lint-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.9'
-      - run: |
-          pip install -r requirements.txt
-          pip install pylint pytest
-          pylint evolving_ideas
-          pytest || echo "No tests yet"
+    uses: ./.github/workflows/linting.yml
 
   changelog-version:
     runs-on: ubuntu-latest

@@ -7,7 +7,6 @@ from typing import Optional
 
 from .template_store import PromptTemplateStore
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -16,7 +15,7 @@ class PromptBuilder:
     Builds prompts by formatting a named template with dynamic context.
     """
 
-    def __init__(self, store: Optional['PromptTemplateStore'] = None):
+    def __init__(self, store: Optional["PromptTemplateStore"] = None):
         """
         :param store: The store instance
         :type store: Optional[PromptTemplateStore]
@@ -27,13 +26,13 @@ class PromptBuilder:
     def build(self, name: str, context: dict) -> str:
         """
         Build a prompt by formatting a template with the given context.
-        
+
         :param name: The name of the template
         :type name: str
-        
+
         :param context: The context to format the template with
         :type context: dict
-        
+
         :return: Formatted context
         :rtype: str
         """

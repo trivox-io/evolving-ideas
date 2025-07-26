@@ -16,10 +16,18 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v3
 
-      - name: Prepare docs for push
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
         run: |
-          mkdir -p output
-          cp -r docs/* output/
+          pip install -r requirements-docs.txt
+
+      - name: Build Sphinx docs with AutoAPI
+        run: |
+          sphinx-build -b html docs/source output/
 
       - name: Push to trivox-docs repo
         uses: peaceiris/actions-gh-pages@v3
@@ -28,6 +36,6 @@ jobs:
           external_repository: trivox-io/trivox-docs
           publish_branch: main
           publish_dir: ./output
-          destination_dir: source/evolving-ideas
-          commit_message: "Update evolving-ideas docs"
+          destination_dir: evolving-ideas
+          commit_message: "Update evolving-ideas built docs"
           keep_files: true

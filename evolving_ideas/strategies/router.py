@@ -6,17 +6,17 @@ METHOD_KEYWORDS = {
     "scamper": ["refactor", "rethink", "transform", "improve", "modify", "adapt"],
     "lotus_blossom": ["expand", "breakdown", "areas", "categories", "dimensions"],
     "six_hats": ["perspective", "alternatives", "risk", "judgment", "feelings"],
-    "classic": []
+    "classic": [],
 }
 
 
 def select_method(task: str) -> str:
     """
     Selects a brainstorming method based on keywords in the task description.
-    
+
     :param task: The task description to analyze.
     :type task: str
-    
+
     :return: The name of the selected method.
     :rtype: str
     """
@@ -27,4 +27,3 @@ def select_method(task: str) -> str:
             return method
 
     return "classic"
-

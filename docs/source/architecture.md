@@ -8,19 +8,19 @@ Welcome to the core structure of **Evolving Ideas**, the automation engine that 
 
 1. **CLI**  
    Parses commands and routes execution.  
-   → [`cli.py`](https://github.com/trivox-io/evolving-ideas/blob/main/cli.py)
+   → [`cli.py`](https://github.com/trivox-io/evolving-ideas/blob/main/evolving_ideas/cli.py)
 
 2. **EvolvingIdeaApp**  
    The central app interface: implements commands like `add`, `improve`, `evolve`.  
-   → [`evolving_idea_app.py`](https://github.com/trivox-io/evolving-ideas/blob/main/evolving_idea_app.py)
+   → [`app.py`](https://github.com/trivox-io/evolving-ideas/blob/main/evolving_ideas/app.py)
 
 3. **IdeaRepository**  
    Handles creation, reading, and listing of idea files.  
-   → [`idea_repository.py`](https://github.com/trivox-io/evolving-ideas/blob/main/idea_repository.py)
+   → [`idea_repository.py`](https://github.com/trivox-io/evolving-ideas/blob/main/evolving_ideas/domain/repositories/idea_repository.py)
 
 4. **IdeaTree**  
    Represents the idea's version tree and evolution structure.  
-   → [`idea_tree.py`](https://github.com/trivox-io/evolving-ideas/blob/main/idea_tree.py)
+   → [`idea_tree.py`](https://github.com/trivox-io/evolving-ideas/blob/main/evolving_ideas/domain/services/idea_tree.py)
 
 ---
 

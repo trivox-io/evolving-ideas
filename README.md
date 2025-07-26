@@ -1,5 +1,6 @@
 # 🧠 Evolving Ideas CLI
 
+<!--start-->
 Turn chaos into clarity. Evolving Ideas helps developers and creators capture, structure, and evolve their thoughts into real, buildable systems.
 
 ## 🚀 Features
@@ -41,16 +42,67 @@ evolving-ideas/
 
 ## 🛠 Setup
 
+Evolving Ideas provides a streamlined setup for Windows environments using a Makefile.
+
 - Requires **python>=3.9<=3.11**
 - OpenAI API Key in .env
 - **Windows only** support for now
 
+### ✅ Automated Setup (Windows only)
+
+If you're on Windows and have Python 3.9–3.11 installed:
+
 ```bash
-python -m venv .venv
-.venv/Scripts/activate
-pip install -r requirements.txt
-cp .env-example .env
+make setup
 ```
+
+This will:
+
+- Check your Python version (must be between 3.9 and 3.11)
+- Create a virtual environment at .venv
+- Install all dev and docs dependencies
+- Set up pre-commit hooks for linting and formatting
+
+After that, activate your environment with:
+
+```bash
+.venv\Scripts\activate
+```
+
+### 🛠 Manual Setup (Linux/Mac or fallback)
+
+If you're not on Windows or prefer manual steps:
+
+```bash
+# Create and activate the virtual environment
+python -m venv .venv
+source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+
+# Install dependencies
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+pip install -r requirements-docs.txt
+
+# (Optional but recommended) Set up pre-commit
+pre-commit install
+```
+
+### ✨ Pre-commit
+
+We use pre-commit to ensure consistent formatting and linting across the codebase. Hooks include:
+
+- ``**isort**`` (with ``black`` profile)
+- **black**
+- **pylint** (with several warnings disabled)
+- **pytest**
+
+To run them manually on all files:
+
+```bash
+pre-commit run --all-files
+```
+
+If you skip pre-commit installation, you'll need to run the formatters and linters manually before committing.
 
 ## 🧪 Usage
 
@@ -87,3 +139,4 @@ MIT – see [LICENSE](LICENSE)
 ## 🤝 Contributing
 
 We welcome contributions! Please read the [contributing guide](CONTRIBUTING.md) and [code of conduct](CODE_OF_CONDUCT.md) before getting started.
+<!--end-->

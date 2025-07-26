@@ -1,5 +1,6 @@
 # Contributing to Evolving Ideas CLI
 
+<!--start-->
 First off, thanks for taking the time to contribute! ❤️
 
 Whether it's a bug report, feature suggestion, or a pull request — you're helping make this project better.
@@ -68,3 +69,4 @@ pytest
 >🛠 We'll integrate ``pytest`` officially once the test structure is ready. If you're adding tests, please follow the pattern: tests/test_<your_module>.py.
 
 Thanks again! You're awesome 🙌
+<!--end-->

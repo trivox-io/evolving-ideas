@@ -2,8 +2,9 @@
 evolving_ideas.strategies.six_hats
 """
 
-from .base import MethodStrategy
 from evolving_ideas.strategies.registry import Registry
+
+from .base import MethodStrategy
 
 
 class SixHatsMethod(MethodStrategy):
@@ -17,20 +18,23 @@ class SixHatsMethod(MethodStrategy):
         "Black": "Identify risks, problems, and caution.",
         "Yellow": "Highlight benefits and value.",
         "Green": "Think creatively and explore alternatives.",
-        "Blue": "Summarize, organize, and plan next steps."
+        "Blue": "Summarize, organize, and plan next steps.",
     }
 
     def run(self, role: str, task: str, context: str) -> dict:
         qna = []
         for hat, description in self.HATS.items():
             self.logger.system(f"Thinking with the {hat} Hat: {description}")
-            prompt = self.builder.build("six_hats_step", {
-                "role": role,
-                "task": task,
-                "context": context,
-                "hat": hat,
-                "description": description
-            })
+            prompt = self.builder.build(
+                "six_hats_step",
+                {
+                    "role": role,
+                    "task": task,
+                    "context": context,
+                    "hat": hat,
+                    "description": description,
+                },
+            )
             question = self.llm_responder.ask(prompt, context).strip()
             self.logger.assistant(question)
 
@@ -47,7 +51,7 @@ class SixHatsMethod(MethodStrategy):
             "qna": qna,
             "summary": summary,
             "method": "six_hats",
-            "method_metadata": {"hats": list(self.HATS.keys())}
+            "method_metadata": {"hats": list(self.HATS.keys())},
         }
 
 

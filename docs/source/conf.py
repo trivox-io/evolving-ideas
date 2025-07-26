@@ -1,5 +1,5 @@
-import os
 import datetime
+import os
 
 # -- Project information -----------------------------------------------------
 project = os.environ.get("PACKAGE_NAME", "evolving_ideas")
@@ -56,22 +56,22 @@ autosummary_generate = True
 
 html_theme_options = {
     "dark_css_variables": {
-        "color-brand-primary": "#00e0ff",                 # cyan from triangle
-        "color-brand-content": "#a259ff",                 # purple from eye
-        "color-background-primary": "#0f0f0f",            # dark black
+        "color-brand-primary": "#00e0ff",  # cyan from triangle
+        "color-brand-content": "#a259ff",  # purple from eye
+        "color-background-primary": "#0f0f0f",  # dark black
         "color-background-hover": "#1a1a1a",
         "color-background-hover--transparent": "#1a1a1a",
-        "color-highlight-on-target": "#332e66",           # accent for headings or links
-        "color-foreground-primary": "#ffffff",            # base text
+        "color-highlight-on-target": "#332e66",  # accent for headings or links
+        "color-foreground-primary": "#ffffff",  # base text
     },
     "light_css_variables": {
-        "color-brand-primary": "#00bfe6",                 # muted cyan for light mode
-        "color-brand-content": "#7c4dff",                 # keep slight purple tint
+        "color-brand-primary": "#00bfe6",  # muted cyan for light mode
+        "color-brand-content": "#7c4dff",  # keep slight purple tint
         "color-background-primary": "#ffffff",
         "color-background-hover": "#f2f2f2",
         "color-background-hover--transparent": "#f9f9f9",
-        "color-highlight-on-target": "#d6c8ff",           # soft violet highlight
-        "color-foreground-primary": "#0f0f0f",            # dark text
+        "color-highlight-on-target": "#d6c8ff",  # soft violet highlight
+        "color-foreground-primary": "#0f0f0f",  # dark text
     },
     "footer_icons": [
         {

@@ -4,9 +4,11 @@ evolving_ideas.strategies.base
 
 from abc import ABC, abstractmethod
 from typing import Optional
+
 from evolving_ideas.infra.responder import LLMResponder
-from evolving_ideas.prompts.builder import PromptBuilder
 from evolving_ideas.interface.presenters import ChatLogger
+from evolving_ideas.prompts.builder import PromptBuilder
+
 
 class MethodStrategy(ABC):
     """
@@ -17,11 +19,16 @@ class MethodStrategy(ABC):
 
     builder: PromptBuilder
 
-    def __init__(self, llm_responder: LLMResponder, builder: Optional[PromptBuilder] = None, chat_logger: Optional[ChatLogger] = None):
+    def __init__(
+        self,
+        llm_responder: LLMResponder,
+        builder: Optional[PromptBuilder] = None,
+        chat_logger: Optional[ChatLogger] = None,
+    ):
         """
         :param llm_responder: The LLM responder to use for generating responses.
         :type llm_responder: Optional[LLMResponder]
-        
+
         :param builder: The prompt builder to use for generating prompts.
         :type builder: Optional[PromptBuilder]
         """

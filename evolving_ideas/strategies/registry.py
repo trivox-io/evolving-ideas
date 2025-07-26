@@ -2,14 +2,14 @@
 evolving_ideas.strategies.registry
 """
 
-from typing import Type, Optional
+from typing import Optional, Type
 
 
 class Registry:
     """
     A registry for storing and managing strategies.
     """
-    
+
     strategies = {}
 
     @classmethod

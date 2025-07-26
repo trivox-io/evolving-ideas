@@ -2,22 +2,20 @@
 evolving_ideas.app
 """
 
-import os
 import logging
+import os
 from pathlib import Path
 from typing import Optional
 
+from evolving_ideas.common.cache_store import CacheStore
 from evolving_ideas.common.logger import setup_logging
-from evolving_ideas.settings import settings
-from evolving_ideas.interface.presenters import chat_logger
-from evolving_ideas.domain.repositories.idea_repository import IdeaRepository
 from evolving_ideas.domain.models.idea import QAPair
+from evolving_ideas.domain.repositories.idea_repository import IdeaRepository
 from evolving_ideas.domain.services.idea_tree import IdeaTree
 from evolving_ideas.infra.responder import LLMResponder
+from evolving_ideas.interface.presenters import chat_logger
 from evolving_ideas.sessions.chat import ChatSession
-
-from evolving_ideas.common.cache_store import CacheStore
-
+from evolving_ideas.settings import settings
 
 setup_logging(logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -27,14 +25,14 @@ class InputCollector:
     """
     Collects user inputs for the idea creation process.
     """
-    
+
     def __init__(self):
         self.cache = CacheStore()
 
     def collect(self) -> dict:
         """
         Collects user inputs for the idea.
-        
+
         :return: A dictionary containing the user inputs.
         :rtype: dict
         """
@@ -79,11 +77,11 @@ class EvolvingIdeaApp:
     """
     Main application class for the Ideas app.
     """
-    
+
     def __init__(self, llm_responder: Optional[LLMResponder] = None):
         """
         Initializes the EvolvingIdeaApp with an optional LLM Responder.
-        
+
         :param llm_responder: The LLM responder to use for generating responses.
         :type llm_responder: LLMResponder
         """
@@ -96,7 +94,7 @@ class EvolvingIdeaApp:
     def add(self) -> dict:
         """
         Start the Ideas app.
-        
+
         :return: A dictionary containing the role, task, Q&A pairs, and summary of the idea.
         :rtype: dict
         """
@@ -104,10 +102,14 @@ class EvolvingIdeaApp:
 
         inputs = self.input_collector.collect()
         author = inputs["author"]
-        
+
         logger.debug(f"Collected inputs: {inputs}")
 
-        idea_data = self.session.run(role=inputs.get("role"), task=inputs.get("task"), context=inputs.get("context"))
+        idea_data = self.session.run(
+            role=inputs.get("role"),
+            task=inputs.get("task"),
+            context=inputs.get("context"),
+        )
 
         repo = IdeaRepository(Path(settings.get("storage_path")))
         idea_tree = repo.add(
@@ -117,19 +119,19 @@ class EvolvingIdeaApp:
             summary=idea_data["summary"],
             author=author,
             method=idea_data["method"],
-            method_metadata=idea_data["method_metadata"]
+            method_metadata=idea_data["method_metadata"],
         )
         chat_logger.system(f"New idea created with ID: {idea_tree.metadata['id']}")
-        
+
         return idea_data
 
     def load(self, idea_id: str) -> IdeaTree:
         """
         Loads an idea by its ID from the repository.
-        
+
         :param idea_id: The unique identifier of the idea to load.
         :type idea_id: str
-        
+
         :return: An IdeaTree object representing the loaded idea.
         :rtype: IdeaTree
         """
@@ -137,7 +139,7 @@ class EvolvingIdeaApp:
     def improve(self, idea_id: str):
         """
         Improves an existing idea version by running a chat session to gather input.
-        
+
         :param idea_id: The unique identifier of the idea to improve.
         :type idea_id: str
         """

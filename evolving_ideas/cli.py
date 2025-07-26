@@ -2,13 +2,13 @@
 evolving_ideas.cli
 """
 
-import sys
 import argparse
 import os
+import sys
+
 from dotenv import load_dotenv
 
 from evolving_ideas.app import EvolvingIdeaApp
-
 
 load_dotenv()
 VERSION = os.getenv("VERSION", "0.1.0")
@@ -36,24 +36,31 @@ def main():
     parser = argparse.ArgumentParser(
         description="Evolving Ideas CLI - Capture and evolve your thoughts into structured systems."
     )
-    parser.add_argument("-v", "--version", action="version", version=f"Evolving Ideas CLI v{VERSION}")
-    subparsers = parser.add_subparsers(dest="command", required=True, help="Available commands")
+    parser.add_argument(
+        "-v", "--version", action="version", version=f"Evolving Ideas CLI v{VERSION}"
+    )
+    subparsers = parser.add_subparsers(
+        dest="command", required=True, help="Available commands"
+    )
 
     # Add command
     subparsers.add_parser("add", help="Start a new idea from scratch")
 
     # Improve command
-    improve_parser = subparsers.add_parser("improve", help="Improve a previously captured idea")
+    improve_parser = subparsers.add_parser(
+        "improve", help="Improve a previously captured idea"
+    )
     improve_parser.add_argument("id", help="ID of the idea to improve")
-    
+
     # evolve command
-    evolve_parser = subparsers.add_parser("evolve", help="Evolve an idea into a more structured system")
+    evolve_parser = subparsers.add_parser(
+        "evolve", help="Evolve an idea into a more structured system"
+    )
     evolve_parser.add_argument("id", help="ID of the idea to evolve")
 
     # Parse args
     args = parser.parse_args()
 
-    
     app = EvolvingIdeaApp()
 
     # Dispatch commands

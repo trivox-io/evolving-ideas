@@ -2,8 +2,9 @@
 evolving_ideas.strategies.scamper
 """
 
-from .base import MethodStrategy
 from evolving_ideas.strategies.registry import Registry
+
+from .base import MethodStrategy
 
 
 class ScamperMethod(MethodStrategy):
@@ -12,7 +13,13 @@ class ScamperMethod(MethodStrategy):
     """
 
     SCAMPER_STEPS = [
-        "Substitute", "Combine", "Adapt", "Modify", "Put to another use", "Eliminate", "Reverse"
+        "Substitute",
+        "Combine",
+        "Adapt",
+        "Modify",
+        "Put to another use",
+        "Eliminate",
+        "Reverse",
     ]
 
     def run(self, role: str, task: str, context: str) -> dict:
@@ -20,12 +27,10 @@ class ScamperMethod(MethodStrategy):
 
         for step in self.SCAMPER_STEPS:
             self.logger.system(f"Applying SCAMPER: {step}")
-            prompt = self.builder.build("scamper_step", {
-                "role": role,
-                "task": task,
-                "context": context,
-                "step": step
-            })
+            prompt = self.builder.build(
+                "scamper_step",
+                {"role": role, "task": task, "context": context, "step": step},
+            )
             question = self.llm_responder.ask(prompt, context).strip()
             self.logger.assistant(question)
 
@@ -42,9 +47,7 @@ class ScamperMethod(MethodStrategy):
             "qna": qna,
             "summary": summary,
             "method": "scamper",
-            "method_metadata": {
-                "steps": self.SCAMPER_STEPS
-            }
+            "method_metadata": {"steps": self.SCAMPER_STEPS},
         }
 
 

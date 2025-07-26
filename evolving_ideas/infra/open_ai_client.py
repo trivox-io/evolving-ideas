@@ -3,14 +3,13 @@ evolving_ideas.infra.open_ai_client
 """
 
 import logging
-from typing import Optional
 from functools import wraps
+from typing import Optional
 
 import openai
 
 from evolving_ideas.common.cache_store import CacheStore
 from evolving_ideas.interface.presenters import chat_logger
-
 
 logger = logging.getLogger(__name__)
 cache = CacheStore()
@@ -26,12 +25,12 @@ class OpenAITransport:
     """
     OpenAI client for interacting with the OpenAI API.
     """
-    
+
     def __init__(self, api_key: Optional[str] = None):
         """
         :param api_key: The OpenAI API key.
         :type api_key: str
-        
+
         :raises ValueError: If the API key is not provided.
         """
         logger.debug("Initializing OpenAITransport with API key.")
@@ -41,16 +40,16 @@ class OpenAITransport:
     def __check_key(self, api_key: str) -> bool:
         """
         Check if the provided API key is valid.
-        
+
         :param api_key: The OpenAI API key.
         :type api_key: str
 
         :return: True if the API key is valid, False otherwise.
         :rtype: bool
-        
+
         :raises ValueError: If the API key is invalid.
         """
-        
+
         if api_key is None:
             raise ValueError("API key is required.")
 
@@ -106,19 +105,21 @@ class OpenAITransport:
             "embedding": embedding_models,
         }
 
-    def chat_completion(self, model: str, messages: list, temperature: float = 0.7) -> dict:
+    def chat_completion(
+        self, model: str, messages: list, temperature: float = 0.7
+    ) -> dict:
         """
         Chat completion using the OpenAI API.
-        
+
         :param model: The model to use (e.g., "gpt-4").
         :type model: str
-        
+
         :param messages: The messages to send to the model.
         :type messages: list
-        
+
         :param temperature: The temperature for the model (default is 0.7).
         :type temperature: float
-        
+
         :return: The response from the model.
         :rtype: dict
         """
@@ -137,10 +138,10 @@ class OpenAITransport:
     def run_thread(self, assistant_id: str, thread_id: str):
         """
         Run a thread for the OpenAI API.
-        
+
         :param assistant_id: The ID of the assistant.
         :type assistant_id: str
-        
+
         :param thread_id: The ID of the thread.
         :type thread_id: str
         """
@@ -149,13 +150,13 @@ class OpenAITransport:
     def add_message(self, thread_id: str, role: str, content: str):
         """
         Add a message to a thread.
-        
+
         :param thread_id: The ID of the thread.
         :type thread_id: str
-        
+
         :param role: The role of the message sender (e.g., "user", "assistant").
         :type role: str
-        
+
         :param content: The content of the message.
         :type content: str
         """
@@ -164,11 +165,13 @@ class OpenAITransport:
     def get_messages(self, thread_id: str):
         """
         Get messages from a thread.
-        
+
         :param thread_id: The ID of the thread.
         :type thread_id: str
         """
-        raise NotImplementedError("Getting messages from a thread is not implemented yet.")
+        raise NotImplementedError(
+            "Getting messages from a thread is not implemented yet."
+        )
 
 
 def cached_validation_wrapper(key: str = "valid_api_key"):
@@ -177,6 +180,7 @@ def cached_validation_wrapper(key: str = "valid_api_key"):
 
     :param key: Key in the cached file to verify.
     """
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -196,7 +200,9 @@ def cached_validation_wrapper(key: str = "valid_api_key"):
                 raise ValueError(f"Cached validation failed for key: {key}")
 
             return True  # cached is True
+
         return wrapper
+
     return decorator
 
 
@@ -204,7 +210,7 @@ class OpenAICredentialValidator:
     """
     Validates OpenAI API credentials.
     """
-    
+
     def __init__(self, client: openai.OpenAI):
         """
         :param client: The OpenAI client instance.
@@ -217,10 +223,10 @@ class OpenAICredentialValidator:
     def validate(self) -> bool:
         """
         Validate the OpenAI API key.
-        
+
         :return: True if the API key is valid, False otherwise.
         :rtype: bool
-        
+
         :raises OpenAIClientError: If the API key is invalid.
         """
         try:
@@ -236,14 +242,16 @@ class OpenAILLM:
     """
     OpenAI Language Model Wrapper
     """
-    
+
     name: str = "openai"
-    
-    def __init__(self, model="gpt-4.1", transport: Optional[OpenAITransport] = None, **kwargs):
+
+    def __init__(
+        self, model="gpt-4.1", transport: Optional[OpenAITransport] = None, **kwargs
+    ):
         """
         :param model: The model to use (default is "gpt-4.1").
         :type model: str
-        
+
         :param transport: The transport layer for API communication.
         :type transport: OpenAITransport
         """
@@ -253,15 +261,15 @@ class OpenAILLM:
         self.model = model
         self.transport = transport
         self._validator = OpenAICredentialValidator(self.transport.client)
-        
+
         logger.debug(f"Initialized OpenAILLM with model: {self.model}")
-        
+
         self.__validate()
 
     def __validate(self):
         """
         Validate the OpenAI API key.
-        
+
         :raises ValueError: If the API key is invalid.
         """
         try:
@@ -270,19 +278,21 @@ class OpenAILLM:
         except OpenAIClientError as e:
             raise ValueError(f"Invalid API key: {e}") from e
 
-    def ask(self, prompt: str, context: Optional[str] = "You are a helpful assistant.") -> str:
+    def ask(
+        self, prompt: str, context: Optional[str] = "You are a helpful assistant."
+    ) -> str:
         """
         Ask the OpenAI model a question and return the answer.
-        
+
         :param prompt: The question to ask.
         :type prompt: str
-        
+
         :param role: The role of the user (e.g., "user", "assistant").
         :type role: str
-        
+
         :param content: The content of the message.
         :type content: str
-        
+
         :return: The answer from the model.
         :rtype: str
         """
@@ -297,10 +307,10 @@ class OpenAILLM:
     def chat(self, chatlog: list[dict]) -> str:
         """
         Chat with the OpenAI model using a chat log.
-        
+
         :param chatlog: The chat log to send to the model.
         :type chatlog: list[dict]
-        
+
         :return: The response from the model.
         :ytype: str
         """

@@ -3,19 +3,21 @@ evolving_ideas.domain.models.idea
 """
 
 from dataclasses import dataclass
-from typing import List, Optional
 from pathlib import Path
+from typing import List, Optional
 
 import yaml
+
 
 @dataclass
 class Attachment:
     """
     Represents an attachment for an idea version.
-    
+
     :cvar path: str: The file path of the attachment.
     :cvar description: str: A brief description of the attachment.
     """
+
     path: str
     description: str
 
@@ -24,10 +26,11 @@ class Attachment:
 class QAPair:
     """
     Represents a question and answer pair for an idea version.
-    
+
     :cvar question: str: The question asked about the idea.
     :cvar answer: str: The answer provided for the question.
     """
+
     question: str
     answer: str
 
@@ -36,7 +39,7 @@ class QAPair:
 class IdeaVersion:
     """
     Represents a version of an idea.
-    
+
     :cvar id: str: Unique identifier for the idea.
     :cvar version: int: The version number of the idea.
     :cvar title: str: The title of the idea.
@@ -52,7 +55,7 @@ class IdeaVersion:
     :cvar linked_projects: List[str]: Projects that this idea is linked to.
     :cvar related_ideas: List[str]: Other ideas that are related to this one.
     """
-    
+
     id: str
     version: int
     title: str
@@ -68,7 +71,7 @@ class IdeaVersion:
     summary: str = ""
     method: Optional[str] = None
     method_metadata: Optional[dict] = None
-    
+
     # TODO - Add these fields in the future
     # linked_projects: List[str] = None
     # related_ideas: List[str] = None
@@ -77,10 +80,10 @@ class IdeaVersion:
     def from_file(cls, path: Path) -> "IdeaVersion":
         """
         Load an IdeaVersion from a YAML file.
-        
+
         :param path: The path to the YAML file.
         :type path: Path
-        
+
         :return: An IdeaVersion object loaded from the file.
         :rtype: IdeaVersion
         """
@@ -90,7 +93,7 @@ class IdeaVersion:
     def to_file(self, path: Path):
         """
         Save the IdeaVersion to a YAML file.
-        
+
         :param path: The path where the YAML file will be saved.
         :type path: Path
         """
@@ -104,12 +107,12 @@ class IdeaVersion:
 class Tree:
     """
     Represents the version tree of an idea.
-    
+
     :cvar root: int: The ID of the root version.
     :cvar current: int: The ID of the current version.
     :cvar children: dict: A dictionary mapping version IDs to their child versions.
     """
-    
+
     root: int
     current: int
     children: dict[str, List[int]]
@@ -119,10 +122,11 @@ class Tree:
 class NodeData:
     """
     Represents a node in the idea tree.
-    
+
     :cvar created_at: str: The timestamp when the node was created.
     :cvar note: str: A note or description for the node.
     """
+
     created_at: str
     note: str
     tags: List[str]
@@ -132,25 +136,25 @@ class NodeData:
 class IdeaMetadata:
     """
     Represents metadata for an idea.
-    
+
     :cvar id: str: Unique identifier for the idea.
     :cvar title: str: The title of the idea.
     :cvar created_by: str: The author of the idea.
     :cvar created_at: str: The timestamp when the idea was created.
     :cvar tree: dict: Metadata about the idea's version tree.
     """
-    
+
     id: str
     title: str
     created_by: str
     created_at: str
     tree: Tree
     node_data: dict[str, NodeData]
-    
+
     def to_dict(self) -> dict:
         """
         Convert the IdeaMetadata to a dictionary.
-        
+
         :return: A dictionary representation of the IdeaMetadata.
         :rtype: dict
         """
@@ -160,5 +164,5 @@ class IdeaMetadata:
             "created_by": self.created_by,
             "created_at": self.created_at,
             "tree": self.tree.__dict__,
-            "node_data": {k: v.__dict__ for k, v in self.node_data.items()}
+            "node_data": {k: v.__dict__ for k, v in self.node_data.items()},
         }

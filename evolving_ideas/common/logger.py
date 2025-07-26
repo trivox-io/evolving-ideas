@@ -2,24 +2,25 @@
 evolving_ideas.common.logger
 """
 
-import sys
 import logging
+import sys
+
 
 class ColorFormatter(logging.Formatter):
     """
     Custom formatter to add colors to log messages.
     """
-    
+
     COLORS = {
         "DEBUG": "\033[94m",  # Blue
-        "INFO": "\033[92m",   # Green
+        "INFO": "\033[92m",  # Green
         "WARNING": "\033[93m",  # Yellow
         "ERROR": "\033[91m",  # Red
-        "CRITICAL": "\033[95m"  # Magenta
+        "CRITICAL": "\033[95m",  # Magenta
     }
-    
+
     RESET = "\033[0m"  # Reset color
-    
+
     def format(self, record):
         log_fmt = self._style._fmt  # Save format string
         color = self.COLORS.get(record.levelname, self.RESET)
@@ -34,7 +35,9 @@ def setup_logging(level=logging.DEBUG, silence_third_party: bool = True):
     Initialize logging with color formatter and dynamic module names.
     Call once during startup.
     """
-    format_ = "%(asctime)s [%(levelname)s] [%(name)s]: %(message)s (%(filename)s:%(lineno)d)"
+    format_ = (
+        "%(asctime)s [%(levelname)s] [%(name)s]: %(message)s (%(filename)s:%(lineno)d)"
+    )
     formatter = ColorFormatter(format_)
 
     handler = logging.StreamHandler(sys.stdout)

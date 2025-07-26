@@ -38,7 +38,9 @@ jobs:
 
       - name: Compare versions
         run: |
-          python -c "from packaging.version import parse as v; n=v('0.1.0'); o=v('v0.1.0'.lstrip('v')); print(f'New: {n}, Old: {o}'); print('✅ OK' if n > o else '❌ FAIL'); exit(0) if n > o else exit(1)" 
+          NEW_VERSION="${{ steps.changelog.outputs.version }}"
+          OLD_VERSION="${{ steps.get_tag.outputs.latest_tag }}"
+          python -c "from packaging.version import parse as v; n=v('${NEW_VERSION}'); o=v('${OLD_VERSION}'.lstrip('v')); print(f'New: {n}, Old: {o}'); print('✅ OK' if n > o else '❌ FAIL'); exit(0) if n > o else exit(1)"
 
   notify:
     if: always()

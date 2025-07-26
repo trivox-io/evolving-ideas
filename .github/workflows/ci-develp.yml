@@ -10,13 +10,6 @@ jobs:
   lint-test:
     uses: ./.github/workflows/linting.yml
 
-  changelog-version:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check for version or changelog file presence
-        run: |
-          test -f CHANGELOG.md && echo "Changelog exists"
-
   notify:
     if: always()
     runs-on: ubuntu-latest

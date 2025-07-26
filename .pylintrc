@@ -1,0 +1,23 @@
+[MASTER]
+ignore-patterns=test_.*\.py,
+    .venv/,
+    .git/,
+    .tox/,
+    .eggs/,
+    build/,
+    dist/
+
+[MESSAGES CONTROL]
+disable=
+    too-few-public-methods,
+    logging-fstring-interpolation,
+    redefined-outer-name,
+    too-many-instance-attributes,
+    fixme,
+    protected-access,
+    unspecified-encoding,
+    broad-exception-caught,
+    missing-function-docstring,
+    unused-argument,
+    too-many-arguments,
+    too-many-positional-arguments

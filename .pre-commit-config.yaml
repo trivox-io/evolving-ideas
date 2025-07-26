@@ -1,0 +1,29 @@
+repos:
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.10.1
+    hooks:
+      - id: isort
+        files: ^evolving_ideas/
+        args: ["--profile", "black"]
+
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
+    hooks:
+      - id: black
+        files: ^evolving_ideas/
+
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        files: ^evolving_ideas/
+
+      - id: pytest
+        name: Run tests
+        entry: pytest
+        language: system
+        types: [python]
+        files: ^evolving_ideas/

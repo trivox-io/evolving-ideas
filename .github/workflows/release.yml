@@ -24,9 +24,9 @@ jobs:
       - name: Extract version from CHANGELOG.md
         id: changelog
         run: |
-          set +e  # Allow grep to fail without stopping the workflow
-          VERSION=$(grep -E '^##\s*v?[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
-          set -e  # Re-enable strict mode
+          set +e  # Allow grep to fail
+          VERSION=$(grep -E '^## \[[0-9]+\.[0-9]+\.[0-9]+\]' CHANGELOG.md | head -n1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+          set -e
 
           if [ -z "$VERSION" ]; then
             echo "❌ Could not extract a version from the CHANGELOG."

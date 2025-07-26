@@ -2,8 +2,9 @@
 evolving_ideas.strategies.classic
 """
 
-from .base import MethodStrategy
 from evolving_ideas.strategies.registry import Registry
+
+from .base import MethodStrategy
 
 
 class ClassicMethod(MethodStrategy):
@@ -13,9 +14,13 @@ class ClassicMethod(MethodStrategy):
 
     def run(self, role: str, task: str, context: str) -> dict:
         self.logger.system("Running classic brainstorming method...")
-        prompt = self.builder.build("ask_questions", {"role": role, "task": task, "context": context})
+        prompt = self.builder.build(
+            "ask_questions", {"role": role, "task": task, "context": context}
+        )
         questions_text = self.llm_responder.ask(prompt, context)
-        questions = [q.strip("- ").strip() for q in questions_text.split("\n") if q.strip()]
+        questions = [
+            q.strip("- ").strip() for q in questions_text.split("\n") if q.strip()
+        ]
 
         qna = []
         for q in questions:
@@ -33,7 +38,7 @@ class ClassicMethod(MethodStrategy):
             "qna": qna,
             "summary": summary,
             "method": "classic",
-            "method_metadata": {"raw_prompt": prompt, "raw_response": questions_text}
+            "method_metadata": {"raw_prompt": prompt, "raw_response": questions_text},
         }
 
 

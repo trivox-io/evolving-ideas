@@ -1,14 +1,14 @@
-""" 
+"""
 evolving_ideas.common.cache_store
 """
 
+import logging
 from pathlib import Path
 from typing import Any, Optional
-import logging
+
 import yaml
 
 from evolving_ideas.settings import settings
-
 
 logger = logging.getLogger(__name__)
 

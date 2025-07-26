@@ -1,7 +1,9 @@
 """
 evolving_ideas.prompts.template_store
 """
+
 from pathlib import Path
+
 import yaml
 
 
@@ -9,6 +11,7 @@ class PromptTemplateStore:
     """
     Singleton to load and cache prompt templates from YAML.
     """
+
     _instance = None
     _templates = {}
 
@@ -29,10 +32,10 @@ class PromptTemplateStore:
     def get(self, name: str) -> str:
         """
         Get a prompt template by name.
-        
+
         :param name: The name of the template
         :type name: str
-        
+
         :return: The template string
         :rtype: str
         """
@@ -41,7 +44,7 @@ class PromptTemplateStore:
     def all(self) -> dict:
         """
         Get all prompt templates.
-        
+
         :return: All templates
         :rtype: dict
         """

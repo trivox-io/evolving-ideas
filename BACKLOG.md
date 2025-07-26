@@ -53,8 +53,8 @@
 
 - [ ] Auto-version bump and changelog on PRs to `main`
 - [x] Auto-generate markdown docs from docstrings (`mkdocs` or similar)
-- [ ] Auto-run format/lint/test pipeline locally on commit
-- [ ] Pre-commit hooks: `black`, `pylint`, `isort`, `pytest`
+- [x] Auto-run format/lint/test pipeline locally on commit
+- [x] Pre-commit hooks: `black`, `pylint`, `isort`, `pytest`
 - [ ] CLI diagnostics (`evolving-ideas doctor`)
 - [ ] Cross-platform config dir support (`~/.config/`, `%APPDATA%/`, etc.)
 - [ ] Poetry migration + dev-friendly config in `pyproject.toml`

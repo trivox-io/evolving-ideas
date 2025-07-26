@@ -8,29 +8,12 @@ on:
 
 jobs:
   lint-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.9'
-      - run: |
-          pip install -r requirements.txt
-          pip install pylint pytest
-          pylint evolving_ideas
-          pytest || echo "No tests yet"
-
-  changelog-version:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check for version or changelog file presence
-        run: |
-          test -f CHANGELOG.md && echo "Changelog exists"
+    uses: ./.github/workflows/linting.yml
 
   notify:
     if: always()
     runs-on: ubuntu-latest
-    needs: [lint-test, changelog-version]
+    needs: [lint-test]
     steps:
       - name: Send Slack notification
         uses: slackapi/slack-github-action@v1.24.0

@@ -32,16 +32,19 @@ class Settings:
         """
         Load settings from .env and YAML file.
         """
-        cls._data = {
-            "storage_path": ".storage/ideas",
-            "cached_path": ".storage/cached.yml",
+        env_data = {
             "openai": {
                 "api_key": os.getenv("OPENAI_API_KEY"),
                 "model": os.getenv("OPENAI_MODEL", "gpt-4"),
             },
         }
+        cls._data = {
+            "storage_path": ".storage/ideas",
+            "cached_path": ".storage/cached.yml",
+            **env_data,
+        }
 
-        yaml_path = Path("config.yml")
+        yaml_path = Path(".storage/config.yml")
         if yaml_path.exists():
             with yaml_path.open("r") as f:
                 yaml_data = yaml.safe_load(f)
@@ -53,7 +56,7 @@ class Settings:
         Recursively merge updates into base dictionary.
         """
         for k, v in updates.items():
-            if isinstance(v, dict) and k in base:
+            if isinstance(v, dict) and isinstance(base.get(k), dict):
                 cls._deep_merge(base[k], v)
             else:
                 base[k] = v

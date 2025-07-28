@@ -8,7 +8,7 @@ import sys
 
 from dotenv import load_dotenv
 
-from evolving_ideas.app import EvolvingIdeaApp
+from evolving_ideas.app import EvolvingIdeaApp, SettingsApp
 
 load_dotenv()
 VERSION = os.getenv("VERSION", "0.1.0")
@@ -58,6 +58,13 @@ def main():
     )
     evolve_parser.add_argument("id", help="ID of the idea to evolve")
 
+    settings_parser = subparsers.add_parser(
+        "settings", help="View or modify application settings"
+    )
+    settings_parser.add_argument(
+        "--view", action="store_true", help="View current settings"
+    )
+
     # Parse args
     args = parser.parse_args()
 
@@ -72,3 +79,7 @@ def main():
     elif args.command == "evolve":
         print("🚧 The 'evolve' command is coming soon. Stay tuned!")
         sys.exit(0)
+    elif args.command == "settings":
+        settings_app = SettingsApp()
+        if args.view:
+            settings_app.view()

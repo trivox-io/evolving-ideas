@@ -1,0 +1,103 @@
+id: idea_00976c1e
+version: 1
+title: Evolving Ideas with AI
+status: raw
+created_at: '2025-07-28T11:01:18.998055'
+author: santiago
+parent_id: null
+description: Evolving Ideas with AI
+context:
+  role: Software architect
+  task: Evolving Ideas with AI
+  notes: ''
+qna:
+- question: 1. "What specific brainstorming methodologies would you like the application
+    to implement?"
+  answer: 'So far: classic, lotus blossom, scamper and six hats.'
+- question: 2. "Can you elaborate on what you mean by making ideas 'TDD & scope ready'?"
+  answer: The tool is for devs and creators so it should allow you to evolve ideas
+    from the most simple sentence to a TDD (technical design document), GDD (Game
+    design document), Scope ready (Like define next steps and even tasks if possible).
+    The system should support versions so you can go back to parts of the idea and
+    improve them and also should allow users to branch their ideas to prove new stuff
+    or pivot and then merge with what they want.
+- question: 3. "What are the key features you would like this application to have?"
+  answer: "It's CLI first with future UI integration and for the mvp it should have\
+    \ add, improve, evolve commands, plus list, show and maybe merge versions. Ideas\
+    \ are store in yml files in idee_<id> folder, they are named with the current\
+    \ version e.g. v1.yml, and there\xB4s a metadata file per ide with version and\
+    \ main idea info."
+- question: 4. "How do you envision the user interface and interaction with the app?"
+  answer: For the MVP, just a CLI
+- question: 5. "Do you have any specific requirements for how the idea evolution process
+    should work?"
+  answer: Idea is added (Like an snapshot of the idea) where we use a LLM to ask the
+    user questions related to the idea, we store the idea in its first version and
+    then the user can use the id to improve and evolve. On improve the user should
+    be able to add brainstorming sessions to the idea context, go back to questions
+    from the qnas and develop on them, and debate with the AI, on evolve they should
+    be able to branch the idea to test new concepts and merge them in the future wioth
+    the main branch.
+- question: 6. "How should the application handle the storage and retrieval of ideas?"
+  answer: For the MVP in configurable yml file
+- question: 7. "Do you have any preferences for the technologies to be used in building
+    this application?"
+  answer: python
+- question: 8. "Are there any performance criteria the application should meet?"
+  answer: Not sure now
+- question: 9. "What level of AI integration are you expecting in the brainstorming
+    process?"
+  answer: Enough to make the idea evolution seamless
+- question: 10. "How do you expect the app to assist in capturing ideas?"
+  answer: Not suere yet.
+attachments: []
+tags: []
+summary: The proposed application is a Python-based, Git-like tool designed to evolve
+  ideas from initial brainstorming to TDD & Scope ready. The application will implement
+  various brainstorming methodologies such as classic, lotus blossom, scamper and
+  six hats. It is designed to assist developers and creators in evolving ideas from
+  a simple sentence to a technical or game design document or scope ready. Key features
+  include a CLI-first design, commands for adding, improving, and evolving ideas,
+  and version control for ideas. Ideas are stored in yml files, with the ability to
+  branch ideas for testing new concepts and merging them back into the main branch.
+  The application will also incorporate AI for seamless idea evolution, though the
+  specifics of this integration are not yet defined.
+method: classic
+method_metadata:
+  raw_prompt: 'Git-like python app to make ideas evolve from capturing and brainstorming
+    to TDD & scope ready by using different brainstroming methodologies You are acting
+    as a Software architect..
+
+    You are acting as a Software architect.
+
+    Help the user clarify the following task:
+
+
+    Evolving Ideas with AI
+
+
+    Ask follow-up questions and return only the questions as a list.
+
+    '
+  raw_response: '1. "What specific brainstorming methodologies would you like the
+    application to implement?"
+
+    2. "Can you elaborate on what you mean by making ideas ''TDD & scope ready''?"
+
+    3. "What are the key features you would like this application to have?"
+
+    4. "How do you envision the user interface and interaction with the app?"
+
+    5. "Do you have any specific requirements for how the idea evolution process should
+    work?"
+
+    6. "How should the application handle the storage and retrieval of ideas?"
+
+    7. "Do you have any preferences for the technologies to be used in building this
+    application?"
+
+    8. "Are there any performance criteria the application should meet?"
+
+    9. "What level of AI integration are you expecting in the brainstorming process?"
+
+    10. "How do you expect the app to assist in capturing ideas?"'

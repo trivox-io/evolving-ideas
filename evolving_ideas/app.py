@@ -2,6 +2,7 @@
 evolving_ideas.app
 """
 
+import json
 import logging
 import os
 from pathlib import Path
@@ -71,6 +72,25 @@ class InputCollector:
             if not required:
                 return ""
             logger.warning("This field is required.")
+
+
+class SettingsApp:
+    """
+    Application class for managing settings.
+    """
+
+    def __init__(self):
+        self.settings = settings
+
+    def view(self) -> dict:
+        """
+        View current application settings.
+
+        :return: A dictionary of current settings.
+        :rtype: dict
+        """
+        data = self.settings.all()
+        print(json.dumps(data, indent=2))
 
 
 class EvolvingIdeaApp:

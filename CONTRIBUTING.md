@@ -68,5 +68,53 @@ pytest
 
 >🛠 We'll integrate ``pytest`` officially once the test structure is ready. If you're adding tests, please follow the pattern: tests/test_<your_module>.py.
 
+### Testing with Example Data
+
+To run the CLI using test data instead of your own ideas, you can override the default storage path by creating a config file.
+
+#### 1. Create a YAML config file
+
+Create a file at:
+
+```bash
+.storage/config.yml
+```
+
+With the following content:
+
+```yaml
+storage_path: tests/example_data/ideas
+```
+
+This setting will override the default storage path (``.storage/ideas``) and load the example ideas provided for testing.
+
+#### 2. How settings are loaded
+
+The app loads settings in the following order of priority:
+
+``.storage/config.yml`` (YAML config – highest priority)
+
+``.env`` file (for things like OpenAI API keys)
+
+Hardcoded defaults (fallbacks in case the above don’t exist)
+
+#### 3. Accessing settings in code
+
+If you need to check or use any setting in the codebase, use the settings singleton:
+
+```python
+from evolving_ideas.settings import settings
+
+# Get the storage path
+
+path = settings.get("storage_path")
+
+# Get the OpenAI model name
+
+model = settings.get("openai.model")
+```
+
+This setup ensures contributors can easily point the CLI to test data while developing features like list, show, or show_tree.
+
 Thanks again! You're awesome 🙌
 <!--end-->

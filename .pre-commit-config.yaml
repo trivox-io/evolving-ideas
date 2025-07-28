@@ -26,4 +26,4 @@ repos:
         entry: pytest
         language: system
         types: [python]
-        files: ^evolving_ideas/
+        files: ^tests/

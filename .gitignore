@@ -193,3 +193,4 @@ Temporary Items
 *.icloud
 
 .storage/
+.models/

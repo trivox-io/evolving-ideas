@@ -9,6 +9,7 @@ import sys
 from dotenv import load_dotenv
 
 from evolving_ideas.app import EvolvingIdeaApp, SettingsApp
+from evolving_ideas.infra.local_llm_downloader import LocalLLMDownloader
 
 load_dotenv()
 VERSION = os.getenv("VERSION", "0.1.0")
@@ -65,6 +66,10 @@ def main():
         "--view", action="store_true", help="View current settings"
     )
 
+    subparsers.add_parser(
+        "download-model", help="Download the local LLM model and tokenizer"
+    )
+
     # Parse args
     args = parser.parse_args()
 
@@ -83,3 +88,6 @@ def main():
         settings_app = SettingsApp()
         if args.view:
             settings_app.view()
+    elif args.command == "download-model":
+        downloader = LocalLLMDownloader()
+        downloader.download()

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 # TODO: This should come from settings or be configurable
-MODEL_ID = "sshleifer/tiny-gpt2"
+MODEL_NAME = "sshleifer/tiny-gpt2"
 SAVE_DIRECTORY = "./.models/tiny-gpt2"
 
 
@@ -21,19 +21,21 @@ class LocalLLMDownloader:
     """
 
     def __init__(
-        self, model_id: Optional[str] = MODEL_ID, save_directory: str = SAVE_DIRECTORY
+        self,
+        model_name: Optional[str] = MODEL_NAME,
+        save_directory: str = SAVE_DIRECTORY,
     ):
-        self.model_id = model_id
+        self.model_name = model_name
         self.save_directory = save_directory
 
     def download(self):
         """
         Downloads the model and tokenizer, saving them to the specified directory.
         """
-        logger.info(f"Downloading model {self.model_id} to {self.save_directory}")
+        logger.info(f"Downloading model {self.model_name} to {self.save_directory}")
         try:
-            tokenizer = AutoTokenizer.from_pretrained(self.model_id)
-            model = AutoModelForCausalLM.from_pretrained(self.model_id)
+            tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+            model = AutoModelForCausalLM.from_pretrained(self.model_name)
 
             tokenizer.save_pretrained(self.save_directory)
             model.save_pretrained(self.save_directory)

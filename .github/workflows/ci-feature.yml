@@ -127,7 +127,7 @@ jobs:
                   "elements": [
                     {
                       "type": "mrkdwn",
-                      "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}> · <!date^${{ needs.setup.outputs.start_unix }}^{date_short_pretty} at {time}|Run time unavailable>"
+                      "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}> · <!date^${{ needs.setup.outputs.start_unix }}^{weekday_short} {day}, {month} {year} at {time}|Run time unavailable>"
                     }
                   ]
                 }

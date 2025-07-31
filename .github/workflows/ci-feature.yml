@@ -7,20 +7,133 @@ on:
     branches: ["feature/**"]
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      start: ${{ steps.set-start.outputs.start }}
+      start_unix: ${{ steps.set-start.outputs.start_unix }}
+    steps:
+      - id: set-start
+        run: |
+          timestamp=$(date +%s)
+          echo "start=$timestamp" >> $GITHUB_OUTPUT
+          echo "start_unix=$timestamp" >> $GITHUB_OUTPUT
+
   lint-test:
+    needs: [setup]
     uses: ./.github/workflows/linting.yml
+    outputs:
+      status: ${{ steps.set_status.outputs.status }}
+
   notify:
     if: always()
     runs-on: ubuntu-latest
-    needs: [lint-test]
+    needs: [setup, lint-test]
     steps:
+
+      - name: Calculate pipeline duration
+        id: duration
+        run: |
+          end=$(date +%s)
+          seconds=$((end - ${{ needs.setup.outputs.start }}))
+
+          if [ "$seconds" -lt 60 ]; then
+            formatted="${seconds}s"
+          elif [ "$seconds" -lt 3600 ]; then
+            minutes=$((seconds / 60))
+            secs=$((seconds % 60))
+            formatted="${minutes}m"
+            [ "$secs" -ne 0 ] && formatted="${formatted} ${secs}s"
+          else
+            hours=$((seconds / 3600))
+            minutes=$(((seconds % 3600) / 60))
+            formatted="${hours}h"
+            [ "$minutes" -ne 0 ] && formatted="${formatted} ${minutes}m"
+          fi
+
+          echo "time=${formatted}" >> $GITHUB_OUTPUT
+
+      - name: Set failed job list
+        id: failed-jobs
+        run: |
+          failed=""
+          [[ "${{ needs.lint-test.result }}" != "success" ]] && failed="${failed}<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Lint> • "
+
+          if [ -n "$failed" ]; then
+            block=$(jq -n --arg text "$failed" '{"type":"section","fields":[{"type":"mrkdwn","text":"*Failed Jobs:*\n\($text)"}]}')
+          else
+            block=""
+          fi
+
+          block_sanitized=$(echo "$block" | jq -c .)
+          echo "block=$block_sanitized" >> $GITHUB_OUTPUT
+
+      - name: Get GitHub user full name
+        id: github-user
+        run: |
+          name=$(curl -s https://api.github.com/users/${{ github.actor }} | jq -r .name)
+          echo "name=${name}" >> $GITHUB_OUTPUT
+
+      - name: Record start time
+        run: echo "start=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Set pipeline status icon
+        id: icon
+        run: |
+          if [[ "${{ needs.build.result }}" != "success" || "${{ needs.lint.result }}" != "success" || "${{ needs.test.result }}" != "success" ]]; then
+            echo "icon=x" >> $GITHUB_OUTPUT
+          else
+            echo "icon=white_check_mark" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set pipeline status word
+        id: word
+        run: |
+          if [[ "${{ needs.build.result }}" != "success" || "${{ needs.lint.result }}" != "success" || "${{ needs.test.result }}" != "success" ]]; then
+            echo "word=failed" >> $GITHUB_OUTPUT
+          else
+            echo "word=passed" >> $GITHUB_OUTPUT
+          fi
+
       - name: Send Slack notification
         uses: slackapi/slack-github-action@v1.24.0
         with:
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           payload: |
             {
-              "text": "🧪 Feature branch `${{ github.ref_name }}` CI complete. View run: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>"
+              "text": ":${{ steps.icon.outputs.icon }}: CI Pipeline <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|#${{ github.run_id }}> has *${{ steps.word.outputs.word }}* in `${{ steps.duration.outputs.time }}`.",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":${{ steps.icon.outputs.icon }}: *${{ steps.github-user.outputs.name }}* (<https://github.com/${{ github.actor }}|@${{ github.actor }}>)\nPipeline <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|#${{ github.run_id }}> has *${{ steps.word.outputs.word }}* in `${{ steps.duration.outputs.time }}`."
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n<https://github.com/${{ github.repository }}/tree/${{ github.head_ref || github.ref_name }}|`${{ github.head_ref || github.ref_name }}`>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:*\n<https://github.com/${{ github.repository }}/commit/${{ github.sha }}|`${{ github.sha }}`> - `${{ github.event.head_commit.message || github.event.pull_request.title || 'Commit message is not available' }}`"
+                    }
+                  ]
+                },
+                ${{ steps.failed-jobs.outputs.block != '' && steps.failed-jobs.outputs.block || '{"type":"section","text":{"type":"mrkdwn","text":"No Warnings"}}' }},
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}> · <!date^${{ needs.setup.outputs.start_unix }}^{date_short_pretty} at {time}|Run time unavailable>"
+                    }
+                  ]
+                }
+              ]
             }
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

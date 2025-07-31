@@ -2,9 +2,13 @@ name: Lint and Test
 
 on:
   workflow_call:
+    outputs:
+      status:
+        description: "Lint/Test status"
+        value: ${{ jobs.final-status.outputs.status }}
 
 jobs:
-  lint-test:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,14 +26,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Set up virtualenv
-        run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r requirements-dev.txt
-          pip install -r requirements-docs.txt
+      - name: Set up virtualenv and install dependencies
+        run: bash scripts/setup_venv.sh
 
       - name: Run isort
         run: .venv/bin/isort evolving_ideas --profile black
@@ -42,7 +40,43 @@ jobs:
           . .venv/bin/activate
           pylint evolving_ideas
 
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Set up virtualenv and install dependencies
+        run: bash scripts/setup_venv.sh
       - name: Run pytest
         run: |
           . .venv/bin/activate
           pytest || echo "No tests yet"
+
+  final-status:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    if: always()
+    outputs:
+      status: ${{ steps.set_status.outputs.status }}
+    steps:
+      - id: set_status
+        run: |
+          if [[ "${{ needs.lint.result }}" != "success" || "${{ needs.test.result }}" != "success" ]]; then
+            echo "status=failure" >> $GITHUB_OUTPUT
+          else
+            echo "status=success" >> $GITHUB_OUTPUT
+          fi

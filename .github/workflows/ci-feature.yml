@@ -22,8 +22,6 @@ jobs:
   lint-test:
     needs: [setup]
     uses: ./.github/workflows/linting.yml
-    outputs:
-      status: ${{ steps.set_status.outputs.status }}
 
   notify:
     if: always()

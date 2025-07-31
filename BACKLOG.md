@@ -20,7 +20,7 @@
 
 - [ ] GPT model selector (`gpt-4`, `gpt-4o`, `gpt-3.5`, etc.)
 - [ ] Support for non-OpenAI APIs (e.g. DeepSeek, Claude, Mistral)
-- [ ] Local model support (Ollama, LM Studio, vLLM)
+- [x] Local model support (Ollama, LM Studio, vLLM)
 - [ ] Cost estimation per idea (tokens + $ breakdown)
 - [ ] Smart tag suggestions using LLM
 - [ ] AI co-pilot (`co_create`) that proposes backlog items & improvements

@@ -4,6 +4,13 @@ ignore-patterns=test_.*\.py,
     .git/,
     .tox/,
     .eggs/,
+    .models/,
+    .storage/,
+    .pytest_cache/,
+    __pycache__/,
+    .idea/,
+    .vscode/,
+    .github/,
     build/,
     dist/
 
@@ -21,4 +28,5 @@ disable=
     unused-argument,
     too-many-arguments,
     too-many-positional-arguments,
+    signature-differs,
     R0801 # duplicate-code

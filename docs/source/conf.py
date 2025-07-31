@@ -4,7 +4,7 @@ import os
 # -- Project information -----------------------------------------------------
 project = os.environ.get("PACKAGE_NAME", "evolving_ideas")
 author = "Santiago Rincón <rincorpes@gmail.com>"
-release = os.environ.get("CI_VERSION", "0.1.0")
+release = os.environ.get("CI_VERSION", "0.2.0")
 copyright = f"{datetime.datetime.now().year} Santiago Rincón"
 
 # -- General configuration ---------------------------------------------------

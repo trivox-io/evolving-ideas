@@ -4,10 +4,21 @@ evolving_ideas.infra.responder
 
 import logging
 
+from evolving_ideas.infra.llm_interface import LLMInterface
+from evolving_ideas.infra.local_llm_client import LocalLLM
 from evolving_ideas.infra.open_ai_client import OpenAILLM
 from evolving_ideas.settings import settings
 
 logger = logging.getLogger(__name__)
+
+LLM_BACKENDS = {"openai": OpenAILLM, "local": LocalLLM}
+
+
+def get_llm_backend(name: str) -> LLMInterface:
+    try:
+        return LLM_BACKENDS[name]
+    except KeyError as e:
+        raise ValueError(f"Unsupported LLM backend: {name}") from e
 
 
 class LLMResponder:
@@ -15,10 +26,16 @@ class LLMResponder:
     Wraps the underlying LLM for easier substitution/testing.
     """
 
+    llm: LLMInterface
+
     def __init__(self):
         logger.debug("Initializing LLM Responder")
-        config: dict = settings.get("openai")
-        self.llm = OpenAILLM(model=config.get("model"), api_key=config.get("api_key"))
+
+        backend = settings.get("llm.backend", "local")
+        model = settings.get("llm.model", "tiiuae/falcon-rw-1b")
+
+        llm_class = get_llm_backend(backend)
+        self.llm = llm_class(model_name=model)
 
     def ask(self, prompt: str, context="You are a helpful assistant.") -> str:
         """

@@ -55,7 +55,7 @@ jobs:
         id: failed-jobs
         run: |
           failed=""
-          [[ "${{ needs.lint-test.result }}" != "success" ]] && failed="${failed}<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Lint> • "
+          [[ "${{ needs.lint-test.outputs.status }}" != "success" ]] && failed="${failed}<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Lint> • "
 
           if [ -n "$failed" ]; then
             block=$(jq -n --arg text "$failed" '{"type":"section","fields":[{"type":"mrkdwn","text":"*Failed Jobs:*\n\($text)"}]}')
@@ -78,7 +78,7 @@ jobs:
       - name: Set pipeline status icon
         id: icon
         run: |
-          if [[ "${{ needs.build.result }}" != "success" || "${{ needs.lint.result }}" != "success" || "${{ needs.test.result }}" != "success" ]]; then
+          if [[ "${{ needs.lint-test.outputs.status }}" == "failure" ]]; then
             echo "icon=x" >> $GITHUB_OUTPUT
           else
             echo "icon=white_check_mark" >> $GITHUB_OUTPUT
@@ -87,7 +87,7 @@ jobs:
       - name: Set pipeline status word
         id: word
         run: |
-          if [[ "${{ needs.build.result }}" != "success" || "${{ needs.lint.result }}" != "success" || "${{ needs.test.result }}" != "success" ]]; then
+          if [[ "${{ needs.lint-test.outputs.status }}" == "failure" ]]; then
             echo "word=failed" >> $GITHUB_OUTPUT
           else
             echo "word=passed" >> $GITHUB_OUTPUT

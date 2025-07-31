@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-VERSION = os.getenv("VERSION", "0.1.0")
+VERSION = os.getenv("VERSION", "0.2.0")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 BANNER = r"""

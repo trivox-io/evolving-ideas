@@ -9,6 +9,7 @@ from typing import Optional
 import openai
 
 from evolving_ideas.common.cache_store import CacheStore
+from evolving_ideas.infra.llm_interface import LLMInterface
 from evolving_ideas.interface.presenters import chat_logger
 
 logger = logging.getLogger(__name__)
@@ -238,7 +239,7 @@ class OpenAICredentialValidator:
             raise OpenAIClientError("Invalid API key.") from e
 
 
-class OpenAILLM:
+class OpenAILLM(LLMInterface):
     """
     OpenAI Language Model Wrapper
     """

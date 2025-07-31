@@ -32,11 +32,20 @@ class Settings:
         """
         Load settings from .env and YAML file.
         """
+        _openai_llm = {
+            "api_key": os.getenv("OPENAI_API_KEY"),
+            "model": os.getenv("OPENAI_MODEL", "gpt-4"),
+        }
+        _local_llm = {
+            "model": os.getenv("LOCAL_LLM_MODEL", "tiiuae/falcon-rw-1b"),
+            "path": os.getenv("LOCAL_LLM_PATH", "./.models/falcon-rw-1b"),
+        }
         env_data = {
-            "openai": {
-                "api_key": os.getenv("OPENAI_API_KEY"),
-                "model": os.getenv("OPENAI_MODEL", "gpt-4"),
-            },
+            "llm": {
+                "backend": "local",
+                "model": "sshleifer/tiny-gpt2",
+                "path": "./.models/tiny-gpt2",
+            }
         }
         cls._data = {
             "storage_path": ".storage/ideas",

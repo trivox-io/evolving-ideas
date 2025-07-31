@@ -7,21 +7,147 @@ on:
     branches: [develop]
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      start: ${{ steps.set-start.outputs.start }}
+      start_unix: ${{ steps.set-start.outputs.start_unix }}
+    steps:
+      - id: set-start
+        run: |
+          timestamp=$(date +%s)
+          echo "start=$timestamp" >> $GITHUB_OUTPUT
+          echo "start_unix=$timestamp" >> $GITHUB_OUTPUT
+
   lint-test:
+    needs: [setup]
     uses: ./.github/workflows/linting.yml
+
+  changelog-validation:
+    name: Validate CHANGELOG.md
+    needs: [lint-test]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Extract [Unreleased] section from PR
+        id: pr-changelog
+        run: |
+          awk '/^## \[Unreleased\]/{flag=1; next} /^## \[/{flag=0} flag' CHANGELOG.md > pr_unreleased.txt
+          hash=$(sha256sum pr_unreleased.txt | cut -d ' ' -f1)
+          echo "pr_hash=$hash" >> $GITHUB_OUTPUT
+
+      - name: Fetch base (develop) branch for comparison
+        run: |
+          git fetch origin develop
+          git checkout origin/develop
+          awk '/^## \[Unreleased\]/{flag=1; next} /^## \[/{flag=0} flag' CHANGELOG.md > base_unreleased.txt
+
+      - name: Compare CHANGELOG content
+        run: |
+          base_hash=$(sha256sum base_unreleased.txt | cut -d ' ' -f1)
+          pr_hash="${{ steps.pr-changelog.outputs.pr_hash }}"
+
+          if [ "$base_hash" = "$pr_hash" ]; then
+            echo "❌ [Unreleased] section is identical to develop. Update it before merging."
+            exit 1
+          else
+            echo "✅ [Unreleased] section is unique."
+          fi
 
   notify:
     if: always()
     runs-on: ubuntu-latest
-    needs: [lint-test]
+    needs: [setup, lint-test, changelog-validation]
     steps:
+      - name: Calculate pipeline duration
+        id: duration
+        run: |
+          end=$(date +%s)
+          seconds=$((end - ${{ needs.setup.outputs.start }}))
+
+          if [ "$seconds" -lt 60 ]; then
+            formatted="${seconds}s"
+          elif [ "$seconds" -lt 3600 ]; then
+            minutes=$((seconds / 60))
+            secs=$((seconds % 60))
+            formatted="${minutes}m"
+            [ "$secs" -ne 0 ] && formatted="${formatted} ${secs}s"
+          else
+            hours=$((seconds / 3600))
+            minutes=$(((seconds % 3600) / 60))
+            formatted="${hours}h"
+            [ "$minutes" -ne 0 ] && formatted="${formatted} ${minutes}m"
+          fi
+
+          echo "time=${formatted}" >> $GITHUB_OUTPUT
+
+      - name: Get GitHub user full name
+        id: github-user
+        run: |
+          name=$(curl -s https://api.github.com/users/${{ github.actor }} | jq -r .name)
+          echo "name=${name}" >> $GITHUB_OUTPUT
+
+      - name: Set pipeline status icon
+        id: icon
+        run: |
+          if [[ "${{ needs.lint-test.outputs.status }}" == "failure" || "${{ needs.changelog-validation.result }}" != "success" ]]; then
+            echo "icon=x" >> $GITHUB_OUTPUT
+          else
+            echo "icon=white_check_mark" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set pipeline status word
+        id: word
+        run: |
+          if [[ "${{ needs.lint-test.outputs.status }}" == "failure" || "${{ needs.changelog-validation.result }}" != "success" ]]; then
+            echo "word=failed" >> $GITHUB_OUTPUT
+          else
+            echo "word=passed" >> $GITHUB_OUTPUT
+          fi
+
       - name: Send Slack notification
         uses: slackapi/slack-github-action@v1.24.0
         with:
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
           payload: |
             {
-              "text": "🧪 Develop branch `${{ github.ref_name }}` CI complete. View run: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>"
+              "text": ":${{ steps.icon.outputs.icon }}: CI Pipeline <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}> has *${{ steps.word.outputs.word }}* in `${{ steps.duration.outputs.time }}`.",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":${{ steps.icon.outputs.icon }}: *${{ steps.github-user.outputs.name }}* (<https://github.com/${{ github.actor }}|@${{ github.actor }}>)\nPipeline <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}> has *${{ steps.word.outputs.word }}* in `${{ steps.duration.outputs.time }}`."
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n<https://github.com/${{ github.repository }}/tree/${{ github.head_ref || github.ref_name }}|`${{ github.head_ref || github.ref_name }}`>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:*\n<https://github.com/${{ github.repository }}/commit/${{ github.sha }}|`${{ github.sha }}`> - `${{ github.event.head_commit.message || github.event.pull_request.title || 'Commit message is not available' }}`"
+                    }
+                  ]
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}> · <!date^${{ needs.setup.outputs.start_unix }}^Run started {date_long} at {time}|Run started on fallback>"
+                    }
+                  ]
+                }
+              ]
             }
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
